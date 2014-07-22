@@ -1,4 +1,4 @@
-global = this
+global = window unless global?
 
 return if @Widget?
 
@@ -245,5 +245,5 @@ Widget.extend
 
 
 Widget
-  .createNamespace('')
-  .activateOnReady()
+.createNamespace('')
+.activateOnReady()
