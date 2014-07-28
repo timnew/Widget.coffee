@@ -4,13 +4,15 @@ widget.coffee [![Bower version][bower-image]][homepage]
 > `widget.coffee` is a light-weight framework to help developer write front-end javascript in a more easier way.
 
 
-## Install
+Install
+-------
 
 Install using [bower][bower-url]:
 
     $ bower install widget.coffee --save
 
-## Quick Start
+Quick Start
+------------
 
 ### Html:
 
@@ -145,7 +147,16 @@ Open Javascript console(browser built-in or `FireBug`), type
 ```javascript
   Widget.findWidgetByType('Timer').toggle()
 ```
- 
+
+Who uses widget.coffee
+-----
+
+`widget.coffee` is original developed for [Sustainable Fishery Partnership](http://www.sustainablefish.org/) Metrics 2.0 system. Later was refined as an independant javascript library uses by variant projects.
+
+* [Metrics 2.0](https://metrics.sustainablefish.org)
+* [LiveHall](http://live-hall.herokuapp.com/)
+* myMobility (haven't went live yet)
+
 ## License
 MIT
 
