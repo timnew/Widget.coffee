@@ -11,7 +11,7 @@
     function Timer() {
       this.reset = __bind(this.reset, this);
       this.lap = __bind(this.lap, this);
-      this.startStop = __bind(this.startStop, this);
+      this.toggle = __bind(this.toggle, this);
       this.tick = __bind(this.tick, this);
       _ref = Timer.__super__.constructor.apply(this, arguments);
       return _ref;
@@ -19,14 +19,14 @@
 
     Timer.prototype.bindDom = function() {
       this.timeSpan = this.element.find('.time');
-      this.startButton = this.element.find('.start-button');
+      this.toggleButton = this.element.find('.toggle-button');
       this.lapButton = this.element.find('.lap-button');
       this.resetButton = this.element.find('.reset-button');
       return this.scoreBoard = Widget.findWidgetByType('ScoreBoard');
     };
 
     Timer.prototype.enhancePage = function() {
-      this.startButton.click(this.startStop);
+      this.toggleButton.click(this.toggle);
       this.lapButton.click(this.lap);
       return this.resetButton.click(this.reset);
     };
@@ -46,7 +46,7 @@
       return this.timeSpan.text("" + this.time + " ms");
     };
 
-    Timer.prototype.startStop = function() {
+    Timer.prototype.toggle = function() {
       return this.controlTimer(!this.running);
     };
 
@@ -67,11 +67,11 @@
 
     Timer.prototype.refreshButtonStatus = function() {
       if (this.running) {
-        this.startButton.text('Stop');
+        this.toggleButton.text('Stop');
         this.lapButton.removeAttr('disabled');
         return this.resetButton.attr('disabled', 'disabled');
       } else {
-        this.startButton.text('Start');
+        this.toggleButton.text('Start');
         this.lapButton.attr('disabled', 'disabled');
         return this.resetButton.removeAttr('disabled');
       }

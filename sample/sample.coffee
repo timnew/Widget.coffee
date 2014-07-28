@@ -1,13 +1,13 @@
 class @Timer extends Widget
   bindDom: ->
     @timeSpan = @element.find('.time')
-    @startButton = @element.find('.start-button')
+    @toggleButton = @element.find('.toggle-button')
     @lapButton = @element.find('.lap-button')
     @resetButton = @element.find('.reset-button')
     @scoreBoard = Widget.findWidgetByType('ScoreBoard')
 
   enhancePage: ->        
-    @startButton.click @startStop
+    @toggleButton.click @toggle
     @lapButton.click @lap
     @resetButton.click @reset
         
@@ -23,7 +23,7 @@ class @Timer extends Widget
   refreshTime: ->
     @timeSpan.text("#{@time} ms")
     
-  startStop: =>       
+  toggle: =>       
     @controlTimer !@running
 
   controlTimer: (running) ->
@@ -42,11 +42,11 @@ class @Timer extends Widget
 
   refreshButtonStatus: ->
     if @running
-      @startButton.text('Stop')        
+      @toggleButton.text('Stop')        
       @lapButton.removeAttr('disabled')        
       @resetButton.attr('disabled', 'disabled')
     else
-      @startButton.text('Start')  
+      @toggleButton.text('Start')  
       @lapButton.attr('disabled', 'disabled')
       @resetButton.removeAttr('disabled')  
 

@@ -12,7 +12,7 @@ Install using [bower][bower-url]:
 
 ## Quick Start
 
-Html
+### Html:
 
 ```html
 <html>
@@ -23,14 +23,14 @@ Html
   </head>
   <body>
     <div data-widget="Page">
-      <button class="start-button">start</button>
-        <button class="lap-button">lap</button>
-        <button class="reset-button">reset</button>
-          <button data-action-handler='resetAll'>Reset All</button>
+      <button data-action-handler='resetAll'>Reset All</button>
       <hr>
       <div data-widget="Timer" data-widget-part='timer'>
         <div class="time">no record!</div>
-    </div>
+        <button class="toggle-button">start</button>
+        <button class="lap-button">lap</button>
+        <button class="reset-button">reset</button>
+      </div>
       <hr>
       <div data-widget="ScoreBoard">
         <div>History</div>
@@ -43,7 +43,7 @@ Html
 
 ```
 
-Coffeescript:
+### Coffeescript:
 
 
 ```coffeescript
@@ -52,13 +52,13 @@ Coffeescript:
 class @Timer extends Widget
   bindDom: ->
     @timeSpan = @element.find('.time')
-    @startButton = @element.find('.start-button')
+    @toggleButton = @element.find('.toggle-button')
     @lapButton = @element.find('.lap-button')
     @resetButton = @element.find('.reset-button')
     @scoreBoard = Widget.findWidgetByType('ScoreBoard')
 
   enhancePage: ->        
-    @startButton.click @startStop
+    @toggleButton.click @toggle
     @lapButton.click @lap
     @resetButton.click @reset
         
@@ -74,7 +74,7 @@ class @Timer extends Widget
   refreshTime: ->
     @timeSpan.text("#{@time} ms")
     
-  startStop: =>       
+  toggle: =>       
     @controlTimer !@running
 
   controlTimer: (running) ->
@@ -93,11 +93,11 @@ class @Timer extends Widget
 
   refreshButtonStatus: ->
     if @running
-      @startButton.text('Stop')        
+      @toggleButton.text('Stop')        
       @lapButton.removeAttr('disabled')        
       @resetButton.attr('disabled', 'disabled')
     else
-      @startButton.text('Start')  
+      @toggleButton.text('Start')  
       @lapButton.attr('disabled', 'disabled')
       @resetButton.removeAttr('disabled')  
 
@@ -134,10 +134,16 @@ class @Page extends Widget
     @timer.controlTimer(false)
     @timer.reset()
     @scoreBoard.clean()
+ 
+```
 
+### Debugging
 
+`widget.coffee` provides some convenient API for developer to debug the widget in runtime.
+Open Javascript console(browser built-in or `FireBug`), type 
 
-      
+```javascript
+  Widget.findWidgetByType('Timer').toggle()
 ```
  
 ## License
