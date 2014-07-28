@@ -15,12 +15,31 @@ Install using [bower][bower-url]:
 Html
 
 ```html
-	<script src='widget.js'>
-	<script src='sample_widget.js'>
-	<div data-widget="Dashboard">
-		<span class="status"> No data yet! </span>
-		<button>Update</button>
-	</div>
+<html>
+  <head>    
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="widget.js"></script>
+    <script type="text/javascript" src="sample_widgets.js"></script>
+  </head>
+  <body>
+    <div data-widget="Page">
+      <button class="start-button">start</button>
+        <button class="lap-button">lap</button>
+        <button class="reset-button">reset</button>
+          <button data-action-handler='resetAll'>Reset All</button>
+      <hr>
+      <div data-widget="Timer" data-widget-part='timer'>
+        <div class="time">no record!</div>
+    </div>
+      <hr>
+      <div data-widget="ScoreBoard">
+        <div>History</div>
+        <ol data-widget-part="scoreList"></ol>
+        <button data-action-handler="clean">Clean</button>
+      </div>  
+    </div>
+  </body>
+</html>
 
 ```
 
@@ -29,22 +48,95 @@ Coffeescript:
 
 ```coffeescript
 # sample_widget.coffee
-class @SampleWidget extends Widget
+
+class @Timer extends Widget
   bindDom: ->
-  	@statusSpan = @element.find('.status')
-  	@updateButton = @element.find('button')
-  	
-  enhancePage: ->
-  	@updateButton.click @update
-  	  	
+    @timeSpan = @element.find('.time')
+    @startButton = @element.find('.start-button')
+    @lapButton = @element.find('.lap-button')
+    @resetButton = @element.find('.reset-button')
+    @scoreBoard = Widget.findWidgetByType('ScoreBoard')
+
+  enhancePage: ->        
+    @startButton.click @startStop
+    @lapButton.click @lap
+    @resetButton.click @reset
+        
   initialize: ->
-  	@update()
+    @running = false
+    @refreshButtonStatus()
+    @reset()
+
+  tick: =>
+    @time++
+    @refreshTime()
+   
+  refreshTime: ->
+    @timeSpan.text("#{@time} ms")
     
-  update: =>
-  	$.get '/api/status', @updateStatusSpan
+  startStop: =>       
+    @controlTimer !@running
+
+  controlTimer: (running) ->
+    @running = running
+
+    @refreshButtonStatus()
+   
+    if @running
+      @time = 0
+      @refreshTime()
+      @token = setInterval(@tick, 1)
+    else
+      if @token?
+        clearInterval(@token) 
+        delete @token
+
+  refreshButtonStatus: ->
+    if @running
+      @startButton.text('Stop')        
+      @lapButton.removeAttr('disabled')        
+      @resetButton.attr('disabled', 'disabled')
+    else
+      @startButton.text('Start')  
+      @lapButton.attr('disabled', 'disabled')
+      @resetButton.removeAttr('disabled')  
+
+  lap: =>
+    @scoreBoard.addScore(@time)
+    
+  reset: =>
+    delete @time 
+    @timeSpan.text('no record!')
   
-  updateStatusSpan: (text) =>
-  	@statusSpan.text(text)
+class @ScoreBoard extends Widget
+  bindDom: ->
+    @bindWidgetParts()
+
+  enhancePage: ->
+    @bindActionHandlers()
+
+  addScore: (score) ->
+    $('<li>').text("#{score} ms").appendTo(@scoreList)
+
+  clean: ->
+    @scoreList.html('')
+
+
+class @Page extends Widget
+  bindDom: ->
+    @scoreBoard = @findSubWidgetByType('ScoreBoard')
+    @bindWidgetParts()
+
+  enhancePage: ->
+    @bindActionHandlers()
+
+  resetAll: ->
+    @timer.controlTimer(false)
+    @timer.reset()
+    @scoreBoard.clean()
+
+
+
       
 ```
  
