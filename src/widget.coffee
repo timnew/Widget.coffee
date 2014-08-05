@@ -6,6 +6,13 @@ unless @console? # Polyfill for IE
     error: ->
 
 global = this unless global?
+
+$ = @jQuery # Make it compatible with jQuery noConflict mode
+
+unless $?
+  console.error 'jQuery is not loaded'
+  return
+
 class @Widget
   constructor: (@element) ->
     @element.data('widget', this)
