@@ -1,7 +1,6 @@
-global = window unless global?
-
 return if @Widget?
 
+global = this unless global?
 class @Widget
   constructor: (@element) ->
     @element.data('widget', this)
