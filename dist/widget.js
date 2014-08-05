@@ -2,7 +2,9 @@
   var global, normalizeScope,
     __slice = [].slice;
 
-  global = this;
+  if (typeof global === "undefined" || global === null) {
+    global = window;
+  }
 
   if (this.Widget != null) {
     return;

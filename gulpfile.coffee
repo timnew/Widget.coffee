@@ -17,7 +17,7 @@ paths =
   coffee: ['./src/*.coffee']
   dist: './dist'
 
-gulp.task 'bump', 'build', ->  
+gulp.task 'bump', ['build'], ->  
   gulp.src paths.manifest
     .pipe bump { type: argv.bump }
     .pipe gulp.dest('.')  
