@@ -1,12 +1,26 @@
 (function() {
-  var global, normalizeScope,
+  var $, global, normalizeScope,
     __slice = [].slice;
 
-  if (typeof global === "undefined" || global === null) {
-    global = window;
+  if (this.Widget != null) {
+    return;
   }
 
-  if (this.Widget != null) {
+  if (this.console == null) {
+    this.console = {
+      warn: function() {},
+      error: function() {}
+    };
+  }
+
+  if (typeof global === "undefined" || global === null) {
+    global = this;
+  }
+
+  $ = this.jQuery;
+
+  if ($ == null) {
+    console.error('jQuery is not loaded');
     return;
   }
 
