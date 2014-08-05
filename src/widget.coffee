@@ -1,5 +1,10 @@
 return if @Widget?
 
+unless @console? # Polyfill for IE
+  @console = 
+    warn: ->
+    error: ->
+
 global = this unless global?
 class @Widget
   constructor: (@element) ->
