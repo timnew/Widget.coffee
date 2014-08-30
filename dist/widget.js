@@ -258,10 +258,17 @@
   };
 
   Widget.extend({
-    activateOnReady: function() {
-      return $(function() {
+    onDomReady: function() {
+      if (Widget.activateOnReady()) {
         return Widget.activateWidgets();
-      });
+      }
+    },
+    activateOnReady: function(value) {
+      if (value != null) {
+        return Widget._activateOnReady = !!value;
+      } else {
+        return Widget._activateOnReady;
+      }
     },
     onActivating: function(scope, callback) {
       if (scope == null) {
@@ -387,6 +394,8 @@
     }
   });
 
-  Widget.createNamespace('').activateOnReady();
+  $.ready(Widget.onDomReady);
+
+  Widget.createNamespace('').activateOnReady(true);
 
 }).call(this);

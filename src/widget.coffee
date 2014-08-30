@@ -1,7 +1,7 @@
 return if @Widget?
 
 unless @console? # Polyfill for IE
-  @console = 
+  @console =
     warn: ->
     error: ->
 
@@ -155,9 +155,14 @@ normalizeScope = (scope) ->
   scope
 
 Widget.extend
-  activateOnReady: ->
-    $ ->
-      Widget.activateWidgets()
+  onDomReady: ->
+    Widget.activateWidgets() if Widget.activateOnReady()
+
+  activateOnReady: (value) ->
+    if value?
+      Widget._activateOnReady = !!value
+    else
+      Widget._activateOnReady
 
   onActivating: (scope = null, callback) ->
     if scope instanceof Function
@@ -254,7 +259,8 @@ Widget.extend
   findWidgetsByType: (widgetType) ->
     $(item).data('widget') for item in $("[data-widget='#{widgetType}']")
 
+$.ready Widget.onDomReady
 
 Widget
 .createNamespace('')
-.activateOnReady()
+.activateOnReady(true)
