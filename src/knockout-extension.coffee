@@ -32,7 +32,7 @@ ko.bindingHandlers.widget =
     $element.attr('data-widget', widgetName)
     $element.data('widget', viewModel)
 
-    mutate(viewModel, widgetKlass, $element)
+    mutate(viewModel, widgetKlass, [$element])
 
     viewModel.bindDom()
     viewModel.enhancePage()
