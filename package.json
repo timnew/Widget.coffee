@@ -1,6 +1,6 @@
 {
   "name": "Widget.coffee",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "A lightweight frontend controller javascript framework",
   "main": "dist/widget.js",
   "devDependencies": {
