@@ -1,26 +1,27 @@
-mutate = (instance, klass, args = []) ->
-  throw 'Instance must be an object' if typeof instance isnt 'object'
-  throw 'Klass must be a class' if typeof klass isnt 'function'
+mutator =
+  mutate: (instance, klass, args = []) ->
+    throw 'Instance must be an object' if typeof instance isnt 'object'
+    throw 'Klass must be a class' if typeof klass isnt 'function'
 
-  instance.__proto__ = klass.prototype
-  klass.apply(instance, args)
-  instance
+    instance.__proto__ = klass.prototype
+    klass.apply(instance, args)
+    instance
 
-fixForIE = (instance, klass, args = []) ->
-  throw 'Instance must be an object' if typeof instance isnt 'object'
-  throw 'Klass must be a class' if typeof klass isnt 'function'
+  fixForIE: (instance, klass, args = []) ->
+    throw 'Instance must be an object' if typeof instance isnt 'object'
+    throw 'Klass must be a class' if typeof klass isnt 'function'
 
-  for k,v of klass.prototype when instance[k] is undefined
-    instance[k] = v
+    for k,v of klass.prototype when instance[k] is undefined
+      instance[k] = v
 
-  klass.apply(instance, args)
-  instance
+    klass.apply(instance, args)
+    instance
 
 mutate = if ({}).__proto__ is undefined
             console.warn '__proto__ is not supported by current browser, fallback to hard-copy approach' if window.console?
-            fixForIE
+            mutator.fixForIE
           else
-            mutate
+            mutator.mutate
 
 ko.bindingHandlers.widget =
   init: (element, valueAccessor, allBindings, viewModel, bindingContext) ->
@@ -31,7 +32,7 @@ ko.bindingHandlers.widget =
     $element.attr('data-widget', widgetName)
     $element.data('widget', viewModel)
 
-    KOWidget.mutate(viewModel, widgetKlass, $element)
+    mutate(viewModel, widgetKlass, $element)
 
     viewModel.bindDom()
     viewModel.enhancePage()
