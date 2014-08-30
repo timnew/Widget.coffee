@@ -394,7 +394,7 @@
     }
   });
 
-  $.ready(Widget.onDomReady);
+  $(Widget.onDomReady);
 
   Widget.createNamespace('').activateOnReady(true);
 

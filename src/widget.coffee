@@ -259,7 +259,7 @@ Widget.extend
   findWidgetsByType: (widgetType) ->
     $(item).data('widget') for item in $("[data-widget='#{widgetType}']")
 
-$.ready Widget.onDomReady
+$(Widget.onDomReady)
 
 Widget
 .createNamespace('')
